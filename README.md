@@ -78,6 +78,36 @@ __1. Index Creation__
 
 __2. Query Execution__
 
+Let's assume we want to find all document containng the word "company" and see hopw the query syntax differ with respect with the different types of indexes:
+
+* Regex: For issuing queries using `$regex` we should use an MQL statement:
+
+
+```javascript
+{
+	"title": { $regex: /^company/}
+}
+```
+
+* $text: For issuing queries using `$text` we should use an MQL statement:
+
+```javascript
+{ $text: { $search: "company" }}
+```
+
+* $search: For issuing queries using `$search` we should use the aggregation framework and the `$search` stage:
+```javascript
+db.coll.aggregate([
+  {
+    $search: {
+      "text": {
+        "query": "company",
+        "path": "body"
+      }
+    }
+  }
+])
+```
 
 
 
