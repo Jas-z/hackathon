@@ -1,6 +1,7 @@
 # Hackathon 
 
-blablabla
+$search vs $regex vs $text: The Best Way to Get There
+
 ## Mission statement
 Demonstrate the efficiency of using $search instead of $regex/$text for common use cases and the computation impact on a system at scale.
 
@@ -35,6 +36,16 @@ __3. Load dataset__
 ```bash
 mongoimport mongodb+srv://<user>:<password>@atlassearch-trec2019.4m8aa.mongodb.net --db TREC2019 --collection corpus  --type tsv --file msmarco-docs.tsv --fields=docid, url, title, body
 ```
+
+## Total Collection Siezs
+*  Corpus         21.50GB
+*  Corpus_100k    637.47KB
+*  Corpus_1M      6.99KB
+* Corpus_500k    6.97KB
+ 
+ 
+ ![TSui023sHJcztL1yV6n6DFlK_9jzEHkif7Ec-TwKJ3SAtOF6MK8F68Z9vSO3CsyoQ29Cwaz4kPfTF57u1XbHkdVZ8yLaFFZxlaybOcPKDZ5F8Dh53xkJBU67OApH](https://user-images.githubusercontent.com/91968499/166864977-d6bec834-a102-450b-adc7-ff1d729b4f1b.png)
+
 
 
 ## Execution
@@ -121,4 +132,63 @@ db.stores.find( { $text: { $search: "\"coffee shop\"" } } )
 
 
 ## Findings
+
+$text restriction:
+* A collection can have at most 1 text index VS we could have multiple $search indexes.  
+
+Below is the diagram which shows what happens when you try to create a 2nd $text index on the collection corpus_100k if you already have.  So delete any index and create a new one if needed, else you would need multiple collections to support multiple text indexes.
+
+![liv935aCpk2q6d1ldm3sFjkjXkMGS6X5RhbK1iHl1iUAjdcDQ5eTh_nsxkW2tbj4JuL3302MAYFO-wX43f2e4AknJqM0AuDWwFnrl_hJCD-xDZDCqxC4SSGnKFY4](https://user-images.githubusercontent.com/91968499/166865340-f4d3a847-6caa-4e21-bfd7-03988043351f.png)
+
+
+* wildcard $text index i.e. db.collection.createIndex( { "$**": "text" } ).  With a wildcard text index, MongoDB indexes every field that contains string data for each document in the collection BUT only string, so no support for e.g. numeric/geospatial etc.
+
+Since all the fields are in collections are string
+![2aF3ONRI-133ilpoyTBX6zc88pO1zfr-Rk7-jeSd8bUqW0P7Ewu-bsXe3-xTrCktX5HqD93qey7zJHj7Z26nbgBdUzl3TboFKhjFw-GeNYK8At_1YVoexI3oMMro](https://user-images.githubusercontent.com/91968499/166865403-36c621a0-2386-4967-99bc-01476039b5ba.png)
+
+except _id field, we could do a side-by-side comparison of comparing between a $text wildcard index vs a $search dynamic index which indexes every field.
+
+CPU/MEM utilization during $text wildcard index creation:
+<img width="741" alt="TfYF_sKq-RREmHHE6UXoYeczlB2FBRcbTVvyU4ZOfRpCq03dYEDJomwhZGQ3ebI566EpZKcEnrFX8XbnQnguytyUZABVJ9WDiGlxNiD0EFJKSMTsO9lxYBJPsqPI" src="https://user-images.githubusercontent.com/91968499/166865460-5035ecdd-8099-47a9-b09b-4ab84bc663b1.png">
+
+And this took around 27 minutes to create the $text wildcard index.  After creation, we could see the stats and size (4.9 GB, around ⅔ the total size of the collection) of the index created:
+![ZzgAQLiJwPGkYjhzAuG2C9QwKhh1YZkJYditM_YQLYcbtxeQXw1y-gembkJFF4-aX61lhQApI0YuhVHq4fRRZMZXMBEiQwpjtNbcslGYYZNhRrQXPELL-x_EDi4e](https://user-images.githubusercontent.com/91968499/166865556-8f118a5a-3c61-465b-a538-42bb32ee01a3.png)
+
+Using $search default dynamic index, we could see that the size of the $search default index was 8.56 GB instead, more than the size of the $text wildcard index probably due to less/no compression on mongot.
+![Yv2Y4jLqGg55Px7jLg0nGFuHdnMe1yzcGk4a1mHiAgFYTpYNcTQake-Z0eA9VsdtPxjTT7NbncZkqj1cCkV0y6Y1ghIVXVmRxYHxXQLzfe_I3F5DGe7VdTPR5Ekg](https://user-images.githubusercontent.com/91968499/166865601-a2e2844d-1cc9-4dab-9b78-ee6e6d8d257c.png)
+
+<img width="739" alt="CgUedizdRIdH0OwiwF4AvbRnJTvU98_ru6AMoZCxZntWN_v1OGAcftyPwN3uUxotpwrQzKUVOQGhWJ27dBskuHxzxHb3P_12B5SRAvqp3zRm5kuuYa3_6YwpDhy-" src="https://user-images.githubusercontent.com/91968499/166865632-219a7f8d-2544-45e5-8bc6-850da7ffc3e6.png">
+
+During the creation of the $search dynamic index, CPU and memory utilization are considered normal, with not much increase compared with $text wildcard index.  
+
+Using the $text wildcard index, the search using the term “Carbon Monoxide” returns 29,851 docs in 107 ms.
+<img width="549" alt="Type it for nore" src="https://user-images.githubusercontent.com/91968499/166865663-cf6060f7-933b-4caf-ba1a-442cd9729102.png">
+
+<img width="314" alt="fy3_AUQ4PbFpaokKbPEZ2H_hDpPoYoacE38oV_SgFHnPqyvN_gR7y7WvCDP55KUd0F86sWvGCNba0ySpokovrOaTyQP6X1wTyyJkGkj8fWxtFRQzPnTGA3HNvc8v" src="https://user-images.githubusercontent.com/91968499/166865696-fee9521e-3341-4d75-bbbb-91ca135b3b1f.png">
+
+
+Using the $search default index, the search using the term “Carbon Monoxide” using this aggregation pipeline i.e.
+```javascript
+[{$search: {
+ index: 'default',
+ text: {
+  query: 'Carbon Monoxide',
+  path: {
+   wildcard: '*'
+  }
+ }
+}}, {$count: 'url'}]
+
+```
+
+Returns a total of 24,748 docs and it took only 10 ms, ranked with scores.  Much faster!
+
+![Search Tester](https://user-images.githubusercontent.com/91968499/166865812-240d8962-2d67-4393-ba5a-7c0d2a47426c.png)
+
+
+* $text search languages (https://www.mongodb.com/docs/manual/reference/text-search-languages/#std-label-text-search-languages.  There are altogether around 15 languages support ) vs $search languages (i.e. 42 language analyzers)
+* $text indexes can be large (title and body fields in corpus data set) but the size of $search indexes could be optimized further by choosing dynamic: false instead of dynamic: true in the creation of the index.
+* When building a large text index on an existing collection, ensure that you have a sufficiently high limit on open file descriptors, because every text index is stored as a file.
+
+
 
