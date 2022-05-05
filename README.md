@@ -92,7 +92,11 @@ Let's assume we want to find all document containng the word "company" and see h
 * $text: For issuing queries using `$text` we should use an MQL statement:
 
 ```javascript
-{ $text: { $search: "company" }}
+{ 	
+	$text: { 
+		$search: "company" 
+	}
+}
 ```
 
 * $search: For issuing queries using `$search` we should use the aggregation framework and the `$search` stage:
