@@ -33,6 +33,8 @@ mongoimport mongodb+srv://<user>:<password>@atlassearch-trec2019.4m8aa.mongodb.n
 
 ## Execution
 
+__1. Regex__
+
 * For testing `$regex` we should create an index on the desired fields.
 
 
@@ -42,10 +44,45 @@ mongoimport mongodb+srv://<user>:<password>@atlassearch-trec2019.4m8aa.mongodb.n
 }
 ```
 
+__2. $text__
 
-```bash
-pip install foobar
+* For testing `$text` we should create a text index on the desired fields.
+
+```javascript
+{
+	"title": "text",
+	"body": "text"
+}
 ```
+
+__3. $search__
+
+* For testing `$text` we should create an Atlas Search index on the desired fields.
+
+```javascript
+{
+  "mappings": {
+    "dynamic": false,
+    "fields": {
+      "body": {
+        "type": "string"
+      },
+      "title": {
+        "type": "string"
+      }
+    }
+  }
+}
+```
+
+
+
+
+
+
+db.stores.find( { $text: { $search: "\"coffee shop\"" } } )
+
+
 
 ## Usage
 
