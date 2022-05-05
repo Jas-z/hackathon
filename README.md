@@ -57,7 +57,7 @@ __2. $text__
 
 __3. $search__
 
-* For testing `$text` we should create an Atlas Search index on the desired fields.
+* For testing `$search` we should create an Atlas Search index on the desired fields.
 
 ```javascript
 {
