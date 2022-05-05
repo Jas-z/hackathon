@@ -33,7 +33,7 @@ mongoimport mongodb+srv://<user>:<password>@atlassearch-trec2019.4m8aa.mongodb.n
 
 ## Execution
 
-* For testing $regex we should create an index on the desired fields.
+* For testing `$regex` we should create an index on the desired fields.
 
 
 ```javascript
