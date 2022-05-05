@@ -39,10 +39,10 @@ mongoimport mongodb+srv://<user>:<password>@atlassearch-trec2019.4m8aa.mongodb.n
 
 ## Execution
 
-_1. Index Creation_
-__1.1 Regex__
+__1. Indexes creations__
+* Regex
 
-* For testing `$regex` we should create an index on the desired fields.
+For testing `$regex` we should create an index on the desired fields.
 
 
 ```javascript
@@ -51,9 +51,9 @@ __1.1 Regex__
 }
 ```
 
-__1.2 $text__
+* $text
 
-* For testing `$text` we should create a text index on the desired fields.
+ For testing `$text` we should create a text index on the desired fields.
 
 ```javascript
 {
@@ -62,9 +62,9 @@ __1.2 $text__
 }
 ```
 
-__1.3 $search__
+* $search
 
-* For testing `$search` we should create an Atlas Search index on the desired fields.
+For testing `$search` we should create an Atlas Search index on the desired fields.
 
 ```javascript
 {
