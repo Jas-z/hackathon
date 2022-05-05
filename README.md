@@ -86,16 +86,5 @@ db.stores.find( { $text: { $search: "\"coffee shop\"" } } )
 
 
 
-## Usage
+## Findings
 
-```json
-{"_id":{"$oid":"626805140c1aa123ecccb93c"},"docid":"D3233725","url":"http://www.akc.org/dog-breeds/dogo-argentino/care/","title":"Dogo Argentino","body":"Dogo Argentino Miscellaneous The Dogo Argentino is a pack-hunting dog, bred for the pursuit of big-game such as wild boar and puma, and possesses the strength, intelligence and quick responsiveness of a serious athlete. His short, plain and smooth coat is completely white, but a dark patch near the eye is permitted as long as it doesn't cover more than 10% of the head. Dog Breeds Dogo Argentinocompare this breed with any other breed/s of your choosing Personality: Loyal, trustworthy, and, above all else, courageous Energy Level: Somewhat Active; Dogos require vigorous exercise to stay at their physical and temperamental best Good with Children: Better with Supervision Good with other Dogs: With Supervision Shedding: Infrequent Grooming: Occasional Trainability: Responds Well Height: 24-27 inches (male), 23.5-26 inches (female)Weight: 80-100 pounds Life Expectancy: 9-15 years Barking Level: Barks When Necessarymeet the Dogo Argentino Did you know? The Dogo Argentino is also known as the Argentinian Mastiff. How similar are you? Find out!Breed History1995The Dogo Argentino was first recorded in the Foundation Stock Service. Breed Standard Learn more about the Dogo Argentino breed standard. Click Here Colors & Markings10Learn Moreat a Glance Energy & Sizemedium ENERGY & large size NATIONAL BREED CLUBThe Dogo Argentino Club Of America Find Dogo Argentino Puppiesthe Breed Standard Embed the breed standard on your site. Download the complete breed standard or club flier PDFs.01020304050607General Appearance Molossian normal type, mesomorphic and macrothalic, within the desirable proportions without gigantic dimensions. Its aspect is harmonic and vigorous due to its powerful muscles which stand out under the consistent and elastic skin adhered to the body through a not very lax subcutaneous tissue. It walks quietly but firmly, showing its intelligence and quick responsiveness and revealing by means of its movement its permanent happy natural disposition. Of a kind and loving nature, of a striking whiteness, its physical virtues turn it into a real athlete. Dogo Argentino Care Nutrition & Feeding Good nutrition for Dogo Argentinos is very important from puppyhood to their senior years. Read More Coat & Grooming The breed's coat needs only weekly brushing. Read More Exercise The Dogo Argentina is not a good choice for the novice owner. Read More Health Dogo Argentinos are generally a healthy breed. Read Moreget involved in Clubs & Events National Breed Clubthe Dogo Argentino Club of America Local Clubs Find the Local Clubs in your area. Meetups Explore meetups.com and see all of the local Dogo Argentinos in your area.breeds Similar to the Dogo Argentino Cane Corso Plott Rhodesian Ridgeback Great Dane Bullmastiffexplore Other Breeds By Dog Breed By Dog Group "}
-```
-
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
-
-## License
-[MIT](https://choosealicense.com/licenses/mit/)
